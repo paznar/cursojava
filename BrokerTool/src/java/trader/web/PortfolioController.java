@@ -33,7 +33,7 @@ public class PortfolioController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String customerId = request.getParameter("CustomerIdentity");
+        String customerId = request.getParameter("customerIdentity");
         
         BrokerModel model = BrokerModelImpl.getInstance();
         
