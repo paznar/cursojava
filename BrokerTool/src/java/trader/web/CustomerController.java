@@ -76,7 +76,7 @@ public class CustomerController extends HttpServlet {
                 request.setAttribute("message", be.getMessage());
             }
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("CustomerDetails");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CustomerDetails.jsp");
             dispatcher.forward(request, response);
         }
         else if(path.equals("/AllCustomers"))
