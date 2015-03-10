@@ -1,7 +1,7 @@
-Tue Mar 10 12:56:44 CET 2015 : Apache Derby Network Server - 10.8.3.2 - (1557835) se ha iniciado y está listo para aceptar conexiones en el puerto 1527
+Tue Mar 10 13:26:23 CET 2015 : Apache Derby Network Server - 10.8.3.2 - (1557835) se ha iniciado y está listo para aceptar conexiones en el puerto 1527
 ----------------------------------------------------------------
-Tue Mar 10 12:56:45 CET 2015:
- Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): instancia a816c00e-014c-038b-53e8-00007491edb5 
+Tue Mar 10 13:28:16 CET 2015:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): instancia a816c00e-014c-03a6-7734-00007491edb5 
 en el directorio de base de datos C:\cursojava\databases\StockMarket  con el cargador de clases sun.misc.Launcher$AppClassLoader@5b3d9c02
 
 java.vendor=Oracle Corporation
@@ -13,12 +13,12 @@ os.version=6.1
 derby.system.home=C:\cursojava\databases
 Cargador de clases de base de datos iniciado - derby.database.classpath=''
 ----------------------------------------------------------------
-Tue Mar 10 12:56:50 CET 2015:
-Cerrando la instancia a816c00e-014c-038b-53e8-00007491edb5 en el directorio de base de datos C:\cursojava\databases\StockMarket con cargador de clases sun.misc.Launcher$AppClassLoader@5b3d9c02
-Tue Mar 10 12:56:50 CET 2015 Thread[DRDAConnThread_3,5,main] (DATABASE = StockMarket), (DRDAID = {2}), Conclusión de la base de datos 'StockMarket'.
+Tue Mar 10 13:28:21 CET 2015:
+Cerrando la instancia a816c00e-014c-03a6-7734-00007491edb5 en el directorio de base de datos C:\cursojava\databases\StockMarket con cargador de clases sun.misc.Launcher$AppClassLoader@5b3d9c02
+Tue Mar 10 13:28:21 CET 2015 Thread[DRDAConnThread_3,5,main] (DATABASE = StockMarket), (DRDAID = {2}), Conclusión de la base de datos 'StockMarket'.
 ----------------------------------------------------------------
-Tue Mar 10 12:57:22 CET 2015:
- Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): instancia 6c44409f-014c-038b-53e8-00007491edb5 
+Tue Mar 10 13:28:33 CET 2015:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): instancia 23ce809c-014c-03a6-7734-00007491edb5 
 en el directorio de base de datos C:\cursojava\databases\StockMarket  con el cargador de clases sun.misc.Launcher$AppClassLoader@5b3d9c02
 
 java.vendor=Oracle Corporation
