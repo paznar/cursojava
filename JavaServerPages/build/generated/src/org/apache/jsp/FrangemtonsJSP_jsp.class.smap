@@ -1,0 +1,15 @@
+SMAP
+FrangemtonsJSP_jsp.java
+JSP
+*S JSP
+*F
++ 0 FrangemtonsJSP.jsp
+FrangemtonsJSP.jsp
++ 1 fragment.jspf
+WEB-INF/fragments/fragment.jspf
+*L
+5,14:49
+1#1,5:63
+6:68,3
+18#0,4:71
+*E
