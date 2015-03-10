@@ -1,6 +1,6 @@
 <table border="1">
     <tr>
-        <td><a href="CustomerDetails">Customer Details</a></td>
+        <td><a href="CustomerDetails.xhtml">Customer Details</a></td>
         <td><a href="AllCustomers">All Customers</a></td>
         <td><a href="Stocks.xhtml">Stocks</a></td>
     </tr>
