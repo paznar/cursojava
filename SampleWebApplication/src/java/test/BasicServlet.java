@@ -5,6 +5,7 @@
  */
 package test;
 
+import javax.ejb.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Hyaku Nin Giri
  */
+
 @WebServlet(name = "BasicServlet", urlPatterns = {"/BasicServlet"})
 public class BasicServlet extends HttpServlet {
 
@@ -29,6 +31,8 @@ public class BasicServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @EJB private BasicSessionRemote basicSessionBean;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,6 +45,7 @@ public class BasicServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet BasicServlet at " + request.getContextPath() + "</h1>");
             out.println("Generated at: " + new java.util.Date());
+            out.println("Message: " + basicSessionBean.getMessage());
             out.println("</body>");
             out.println("</html>");
         }
