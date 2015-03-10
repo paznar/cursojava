@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Título del Facelet</title>
+    </h:head>
+    <h:body>
+        <h:form dir="#{localeManager.direction}">
+            <h:selectOneMenu value="#{localeManager.language}" onchange="submit()">
+                    <f:selectItem itemValue="en" itemLabel="English" />
+                    <f:selectItem itemValue="ar" itemLabel="Arabic" />
+                    <f:selectItem itemValue="es" itemLabel="Español" />
+            </h:selectOneMenu>
+        </h:form>
+        
+        <br></br>
+        <h:form dir="#{localeManager.direction}">
+            #{msg.text1}
+            <h:inputText value="#{requestScope.word}" />
+            <br></br>
+            #{msg.text2}
+            <h:inputText id="number" value="#{myBean.number}" validatorMessage="#{msg.validationerror}" >
+                <f:validateDoubleRange minimum="1" maximum="100"/>
+            </h:inputText>
+            <br></br>
+          
+            <h:commandButton value="#{msg.go}" action="response" />
+           
+        </h:form>
+    </h:body>
+</html>
+
+
