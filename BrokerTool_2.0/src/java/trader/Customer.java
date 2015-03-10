@@ -1,11 +1,18 @@
 package trader;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table
 public class Customer implements Serializable {
 
+    @Id 
+    @Column(name = "SSN") 
     private String id;
+    @Column(name = "CUST_NAME") 
     private String name;
+    @Column(name = "ADDRESS") 
     private String addr;
 
     // Constructors

@@ -1,10 +1,15 @@
 package trader;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table
 public class Stock implements Serializable {
 
+    @Id @Column 
     private String symbol;
+    @Column 
     private double price;
 
     public Stock(String symbol, double price) {
