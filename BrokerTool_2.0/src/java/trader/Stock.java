@@ -12,6 +12,10 @@ public class Stock implements Serializable {
     @Column 
     private double price;
 
+    public Stock() {
+        
+    }
+
     public Stock(String symbol, double price) {
         this.symbol = symbol;
         this.price = price;

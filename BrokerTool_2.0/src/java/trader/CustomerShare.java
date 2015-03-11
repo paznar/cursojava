@@ -18,6 +18,10 @@ public class CustomerShare implements Serializable {
     @Column (name = "QUANTITY")
     private int quantity;
 
+    public CustomerShare(){
+        
+    }
+    
     public CustomerShare(String customerId, String stockSymbol, int quantity) {
         this.customerId = customerId;
         this.stockSymbol = stockSymbol;

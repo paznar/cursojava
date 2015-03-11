@@ -6,9 +6,9 @@
 package trader.web;
 
 import javax.ejb.EJB;
-import trader.*;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import trader.*;
 
 /**
  *
