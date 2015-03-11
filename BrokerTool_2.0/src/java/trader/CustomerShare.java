@@ -17,6 +17,9 @@ public class CustomerShare implements Serializable {
     private String stockSymbol;
     @Column (name = "QUANTITY")
     private int quantity;
+    @Version
+    @Column (name = "VERSION")
+    private int version = 1;
 
     public CustomerShare(){
         
@@ -54,5 +57,13 @@ public class CustomerShare implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+    
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -20,6 +20,23 @@ public class CustomerManagedBean {
     private String customerId = "";
     private String customerName = "";
     private String customerAddress = "";
+    private int version = 1;
+
+    public BrokerModel getModel() {
+        return model;
+    }
+
+    public void setModel(BrokerModel model) {
+        this.model = model;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public String getCustomerAddress() {
         return customerAddress;

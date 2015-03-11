@@ -11,6 +11,9 @@ public class Stock implements Serializable {
     private String symbol;
     @Column 
     private double price;
+    @Version
+    @Column (name = "VERSION")
+    private int version = 1;
 
     public Stock() {
         
@@ -36,5 +39,13 @@ public class Stock implements Serializable {
 
     public String toString() {
         return "Stock:  " + symbol + "  " + price;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+    
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

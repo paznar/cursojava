@@ -45,6 +45,11 @@ public class CustomerController extends HttpServlet {
             String name = request.getParameter("customerName");
             String address = request.getParameter("customerAddress");
             String submit = request.getParameter("submit");
+            int version = 1;
+            if(request.getParameter("version") != null && !request.getParameter("version").isEmpty())
+            {
+                version = Integer.parseInt(request.getParameter("version"));
+            }       
             
             try
             {
@@ -58,12 +63,13 @@ public class CustomerController extends HttpServlet {
                     Customer customer = model.getCustomer(id);
                     customer.setName(name);
                     customer.setAddr(address);
+                    customer.setVersion(version);
                     model.updateCustomer(customer);
                     request.setAttribute("customer", customer);
                 }
                 else if(submit.equals("Add Customer"))
                 {
-                    Customer customer = new Customer(id,name,address);
+                    Customer customer = new Customer(id,name,address,version);
                     model.addCustomer(customer);
                     request.setAttribute("customer", customer);
                 }

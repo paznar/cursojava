@@ -14,8 +14,15 @@ public class Customer implements Serializable {
     private String name;
     @Column(name = "ADDRESS") 
     private String addr;
-
-    // Constructors
+    @Version
+    @Column (name = "VERSION")
+    private int version = 1;
+    
+    // Constructors    
+    public Customer(String id, String name, String addr, int version) {
+        this(id, name, addr);
+        this.version = version;
+    }
     public Customer(String id, String name, String addr) {
         this.id = id;
         this.name = name;
@@ -54,6 +61,14 @@ public class Customer implements Serializable {
 
     public String toString() {
         return "Customer:  " + id + "  " + name + "  " + addr;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+    
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
 

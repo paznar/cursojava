@@ -15,7 +15,8 @@
     </head>
     <body>
         <jsp:include page="Menu.jspf"/>
-        <form action='CustomerController' method='POST'>
+        <form action='CustomerController' method='GET'>
+            <input type='hidden' name='version' value='${customer.version}'/>
             <table border='1' cellpadding='4'>
                 <tbody>
                     <tr>

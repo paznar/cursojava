@@ -23,12 +23,14 @@ public class CustomerDetails extends HttpServlet {
         String name = "";
         String address = "";
         String id = "";
+        int version = 1;
         Customer cust = (Customer) request.getAttribute("customer");
 
         if (cust != null) {
             name = cust.getName();
             address = cust.getAddr();
             id = cust.getId();
+            version = cust.getVersion();
         }
 
         response.setContentType("text/html;charset=UTF-8");
@@ -40,8 +42,8 @@ public class CustomerDetails extends HttpServlet {
             out.println("<tbody><tr><td><a href='CustomerDetails'>Customer Details</a></td><td><a href='AllCustomers'>All Customers</a></td><td><a href='Stocks.xhtml'>Stocks</a></td></tr>");
             out.println("</tbody></table>");
             out.println("<br/>");
-
             out.println("<form action='CustomerController' method='GET'>");
+            out.println("<input type='hidden' name='version' value='" + version + "'/>");
             out.println("<table border='1' cellpadding='4'>");
             out.println("<tbody><tr><td>Customer Name</td><td><input name='customerName' value='" + name + "' type='text'/></td></tr>");
             out.println("<tr><td>Customer Identity</td><td><input name='customerIdentity' value='" + id + "' type='text'/></td></tr>");

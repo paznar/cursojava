@@ -70,7 +70,14 @@ public class BrokerModelImpl implements BrokerModel {
         } 
         else 
         {
-            em.merge(cust);
+            try
+            {
+                em.merge(cust);
+            }
+            catch(OptimisticLockException ole)
+            {
+                throw new BrokerException("Record for " + cust.getId() + " has been modified since retrieval");
+            }
         }
     }
 
@@ -140,7 +147,14 @@ public class BrokerModelImpl implements BrokerModel {
         } 
         else 
         {
-            em.merge(cs);
+            try
+            {
+                em.merge(cs);
+            }
+            catch(OptimisticLockException ole)
+            {
+                throw new BrokerException("Record for " + cs.getCustomerId() + " has been modified since retrieval");
+            }
         }
     }
 
@@ -185,7 +199,14 @@ public class BrokerModelImpl implements BrokerModel {
         } 
         else 
         {
-            em.merge(stock);
+            try
+            {
+                em.merge(s);
+            }
+            catch(OptimisticLockException ole)
+            {
+                throw new BrokerException("Record for " + stock.getSymbol() + " has been modified since retrieval");
+            }
         }
     }
 
