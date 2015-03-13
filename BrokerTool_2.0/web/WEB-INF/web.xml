@@ -17,4 +17,8 @@
     <welcome-file-list>
         <welcome-file>CustomerDetails.jsp</welcome-file>
     </welcome-file-list>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>file</realm-name>
+    </login-config>
 </web-app>

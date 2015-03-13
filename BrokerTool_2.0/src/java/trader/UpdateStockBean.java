@@ -4,12 +4,9 @@
  */
 package trader;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;

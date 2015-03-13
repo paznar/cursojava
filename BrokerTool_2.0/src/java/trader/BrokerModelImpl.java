@@ -1,17 +1,25 @@
 package trader;
 
+import java.security.Principal;
 import java.util.*;
+import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Local;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.*;
 
 @Local
 @Stateless
+@DeclareRoles({"admin","customer"})
 public class BrokerModelImpl implements BrokerModel {
 
     @PersistenceContext 
     private EntityManager em;
-    private static BrokerModel instance = new BrokerModelImpl();
+    @Resource
+    private SessionContext ctx;
+//    private static BrokerModel instance = new BrokerModelImpl();
     
 //    public static BrokerModel getInstance() {
 //        return instance;
@@ -110,8 +118,20 @@ public class BrokerModelImpl implements BrokerModel {
         return (Customer[]) customers.toArray(new Customer[0]);
     }
 
+    @RolesAllowed({"admin","customer"})
     public CustomerShare[] getAllCustomerShares(String customerId) throws BrokerException 
     {
+        Principal principal = ctx.getCallerPrincipal();
+        String name = principal.getName();
+        
+//        if(name.equalsIgnoreCase("guest") || name.equalsIgnoreCase("anonymous"))
+//        {
+//            throw new BrokerException("Not Logged In");
+//        }
+        if(!ctx.isCallerInRole("admin") && !(name.equals(customerId)))
+        {            
+            throw new BrokerException("No tienes permisos");
+        }
         Query query = em.createNativeQuery("SELECT * FROM SHARES WHERE SSN = '" + customerId + "'", CustomerShare.class);
         List shares = query.getResultList();
 
