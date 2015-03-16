@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Header/>
+    <soap:Body>
+        <ns1:add xmlns:ns1="http://calculator.me.org/">
+            <i>23</i>
+            <j>23</j>
+        </ns1:add>
+    </soap:Body>
+</soap:Envelope>
