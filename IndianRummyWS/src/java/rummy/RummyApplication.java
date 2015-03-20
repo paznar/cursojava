@@ -17,13 +17,14 @@ public class RummyApplication extends Application {
 
     @Override
     public Set<Object> getSingletons() {
-        HashSet<Object> set = new HashSet<>(1);
+        HashSet<Object> set = new HashSet<>(2);
         try {
             JAXBContextResolver myJAXBContextResolver = new JAXBContextResolver();
             set.add(myJAXBContextResolver);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        set.add(new RummyExceptionMapper());
         return set;
     }
 }

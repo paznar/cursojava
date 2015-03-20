@@ -2,6 +2,8 @@ package rummy;
 
 import cards.CardType;
 import cards.DistributionMethod;
+import cards.GameException;
+import cards.GameException_Exception;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.ws.soap.SOAPFaultException;
 import rummy.jaxb.Player;
 import rummy.jaxb.RummyGame;
 import util.CardUtils;
@@ -51,17 +54,26 @@ public class RummyGameCollectionResource {
 
         // create a game with the correct number of decks
         String gameId;
-        int players = rummyGame.getPlayers().size();
-        if (players >= 2 && players <= 3) {
-            gameId = createCardGame(1, 2);
-        } else if (players >= 4 && players <= 6) {
-            gameId = createCardGame(2, 2);
-        } else if (players >= 7 && players <= 10) {
-            gameId = createCardGame(3, 2);
-        } else {
-            rb = Response.status(Response.Status.BAD_REQUEST);
+        try {
+            int players = rummyGame.getPlayers().size();
+            if (players >= 2 && players <= 3) {
+                gameId = createCardGame(1, 2);
+            } else if (players >= 4 && players <= 6) {
+                gameId = createCardGame(2, 2);
+            } else if (players >= 7 && players <= 10) {
+                gameId = createCardGame(3, 2);
+            } else {
+                rb = Response.status(Response.Status.BAD_REQUEST);
+                return rb.build();
+            }
+        } catch (GameException_Exception ex) {
+            GameException ge = ex.getFaultInfo();
+            rb = Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ge.getMessage());
             return rb.build();
         }
+
 
         // create a empty new game object
         // create game group
@@ -105,27 +117,27 @@ public class RummyGameCollectionResource {
         return rb.build();
     }
 
-@GET
-public List<RummyGame> getGames(@Context UriInfo uriInfo) {
-    List<RummyGame> list = new ArrayList<>();
-    UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
-    for (String groupName : listGroupsByPattern("game-*")) {
-        RummyGame rg = new RummyGame();
-        String gameId = groupName.substring(5);
-        rg.setHref(uriBuilder.clone().path(gameId).build().toString());
-        list.add(rg);
+    @GET
+    public List<RummyGame> getGames(@Context UriInfo uriInfo) {
+        List<RummyGame> list = new ArrayList<>();
+        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+        for (String groupName : listGroupsByPattern("game-*")) {
+            RummyGame rg = new RummyGame();
+            String gameId = groupName.substring(5);
+            rg.setHref(uriBuilder.clone().path(gameId).build().toString());
+            list.add(rg);
+        }
+        return list;
     }
-    return list;
-}
 
-@DELETE
-public void deleteGames() {
-    for (String groupName : listGroupsByPattern("game-*")) {
-        String gameId = groupName.substring(5);
-        removeCardGame(gameId);
-        deleteGroup(groupName);
+    @DELETE
+    public void deleteGames() {
+        for (String groupName : listGroupsByPattern("game-*")) {
+            String gameId = groupName.substring(5);
+            removeCardGame(gameId);
+            deleteGroup(groupName);
+        }
     }
-}
 
     @Path("{id}")
     public RummyGameResource getGameResource() {
@@ -186,7 +198,7 @@ public void deleteGames() {
         port.createAllSupplyPile(gameId, pile);
     }
 
-    private static String createCardGame(int deckCount, int jokersPerDeck) {
+    private static String createCardGame(int deckCount, int jokersPerDeck) throws GameException_Exception {
         cards.CardGameService_Service service = new cards.CardGameService_Service();
         cards.CardGameService port = service.getCardGameServicePort();
         return port.createCardGame(deckCount, jokersPerDeck);

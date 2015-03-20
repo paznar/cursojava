@@ -1,5 +1,6 @@
 package games;
 
+import com.sun.xml.ws.developer.SchemaValidation;
 import deckws.CardDeckSessionBean;
 import deckws.CardDeckSessionBeanService;
 import deckws.CardType;
@@ -19,6 +20,7 @@ import javax.xml.ws.ResponseWrapper;
  *
  * @author mheimer
  */
+@SchemaValidation
 @WebService(serviceName = "CardGameService")
 public class CardGameService {
 
@@ -29,14 +31,29 @@ public class CardGameService {
 
     static {
         try {
-            wsdlURL = new URL("http://localhost:7001/GenericCardGameWS/CardGameService?wsdl");
+            wsdlURL = new URL("file://./" + wsdlLocation);
         } catch (MalformedURLException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     public String createCardGame(@WebParam(name = "deck-count") int numberOfDecks,
-            @WebParam(name = "jokers-per-deck") int jokerCountPerDeck) {
+            @WebParam(name = "jokers-per-deck") int jokerCountPerDeck)
+            throws GameException {
+
+        if (numberOfDecks < 1 || numberOfDecks > 2) {
+            throw new GameException("Only 1-2 decks supported");
+        }
+
+        if (numberOfDecks < 1 || numberOfDecks > 10) {
+
+}
+
+
+
+        if (jokerCountPerDeck < 0 || jokerCountPerDeck > 4) {
+            throw new IllegalArgumentException("Only 0-4 jokers per deck supported");
+        }
 
         CardDeckSessionBeanService service = new CardDeckSessionBeanService(wsdlURL);
         CardDeckSessionBean port = service.getCardDeckSessionBeanPort();

@@ -7,24 +7,6 @@
 <xsd:import namespace="http://games/" schemaLocation="http://localhost:7001/GenericCardGameWS/CardGameService?xsd=2"/>
 </xsd:schema>
 </types>
-<message name="createCardGame">
-<part name="parameters" element="tns:createCardGame"/>
-</message>
-<message name="createCardGameResponse">
-<part name="parameters" element="tns:createCardGameResponse"/>
-</message>
-<message name="removeCardGame">
-<part name="parameters" element="tns:removeCardGame"/>
-</message>
-<message name="removeCardGameResponse">
-<part name="parameters" element="tns:removeCardGameResponse"/>
-</message>
-<message name="transferCards">
-<part name="parameters" element="tns:transferCards"/>
-</message>
-<message name="transferCardsResponse">
-<part name="parameters" element="tns:transferCardsResponse"/>
-</message>
 <message name="create-all-supply-pile">
 <part name="parameters" element="tns:create-all-supply-pile"/>
 </message>
@@ -67,19 +49,28 @@
 <message name="shufflePileResponse">
 <part name="parameters" element="tns:shufflePileResponse"/>
 </message>
+<message name="createCardGame">
+<part name="parameters" element="tns:createCardGame"/>
+</message>
+<message name="createCardGameResponse">
+<part name="parameters" element="tns:createCardGameResponse"/>
+</message>
+<message name="GameException">
+<part name="fault" element="tns:GameException"/>
+</message>
+<message name="removeCardGame">
+<part name="parameters" element="tns:removeCardGame"/>
+</message>
+<message name="removeCardGameResponse">
+<part name="parameters" element="tns:removeCardGameResponse"/>
+</message>
+<message name="transferCards">
+<part name="parameters" element="tns:transferCards"/>
+</message>
+<message name="transferCardsResponse">
+<part name="parameters" element="tns:transferCardsResponse"/>
+</message>
 <portType name="CardGameService">
-<operation name="createCardGame">
-<input wsam:Action="http://games/CardGameService/createCardGameRequest" message="tns:createCardGame"/>
-<output wsam:Action="http://games/CardGameService/createCardGameResponse" message="tns:createCardGameResponse"/>
-</operation>
-<operation name="removeCardGame">
-<input wsam:Action="http://games/CardGameService/removeCardGameRequest" message="tns:removeCardGame"/>
-<output wsam:Action="http://games/CardGameService/removeCardGameResponse" message="tns:removeCardGameResponse"/>
-</operation>
-<operation name="transferCards">
-<input wsam:Action="http://games/CardGameService/transferCardsRequest" message="tns:transferCards"/>
-<output wsam:Action="http://games/CardGameService/transferCardsResponse" message="tns:transferCardsResponse"/>
-</operation>
 <operation name="create-all-supply-pile">
 <input wsam:Action="http://games/CardGameService/create-all-supply-pileRequest" message="tns:create-all-supply-pile"/>
 <output wsam:Action="http://games/CardGameService/create-all-supply-pileResponse" message="tns:create-all-supply-pileResponse"/>
@@ -108,36 +99,22 @@
 <input wsam:Action="http://games/CardGameService/shufflePileRequest" message="tns:shufflePile"/>
 <output wsam:Action="http://games/CardGameService/shufflePileResponse" message="tns:shufflePileResponse"/>
 </operation>
+<operation name="createCardGame">
+<input wsam:Action="http://games/CardGameService/createCardGameRequest" message="tns:createCardGame"/>
+<output wsam:Action="http://games/CardGameService/createCardGameResponse" message="tns:createCardGameResponse"/>
+<fault message="tns:GameException" name="GameException" wsam:Action="http://games/CardGameService/createCardGame/Fault/GameException"/>
+</operation>
+<operation name="removeCardGame">
+<input wsam:Action="http://games/CardGameService/removeCardGameRequest" message="tns:removeCardGame"/>
+<output wsam:Action="http://games/CardGameService/removeCardGameResponse" message="tns:removeCardGameResponse"/>
+</operation>
+<operation name="transferCards">
+<input wsam:Action="http://games/CardGameService/transferCardsRequest" message="tns:transferCards"/>
+<output wsam:Action="http://games/CardGameService/transferCardsResponse" message="tns:transferCardsResponse"/>
+</operation>
 </portType>
 <binding name="CardGameServicePortBinding" type="tns:CardGameService">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="createCardGame">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="removeCardGame">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="transferCards">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
 <operation name="create-all-supply-pile">
 <soap:operation soapAction=""/>
 <input>
@@ -193,6 +170,36 @@
 </output>
 </operation>
 <operation name="shufflePile">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="createCardGame">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="GameException">
+<soap:fault name="GameException" use="literal"/>
+</fault>
+</operation>
+<operation name="removeCardGame">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="transferCards">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

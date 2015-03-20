@@ -2,6 +2,8 @@
 
 <xs:import namespace="urn:dukesdecks" schemaLocation="http://localhost:7001/GenericCardGameWS/CardGameService?xsd=1"/>
 
+<xs:element name="GameException" type="tns:GameException"/>
+
 <xs:element name="create-all-supply-pile" type="tns:create-all-supply-pile"/>
 
 <xs:element name="create-all-supply-pileResponse" type="tns:create-all-supply-pileResponse"/>
@@ -42,17 +44,6 @@
 
 <xs:element name="transferCardsResponse" type="tns:transferCardsResponse"/>
 
-<xs:complexType name="shufflePile">
-<xs:sequence>
-<xs:element name="game-id" type="xs:string" minOccurs="0"/>
-<xs:element name="pile-name" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="shufflePileResponse">
-<xs:sequence/>
-</xs:complexType>
-
 <xs:complexType name="createCardGame">
 <xs:sequence>
 <xs:element name="deck-count" type="xs:int"/>
@@ -64,6 +55,23 @@
 <xs:sequence>
 <xs:element name="return" type="xs:string" minOccurs="0"/>
 </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GameException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="shufflePile">
+<xs:sequence>
+<xs:element name="game-id" type="xs:string" minOccurs="0"/>
+<xs:element name="pile-name" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="shufflePileResponse">
+<xs:sequence/>
 </xs:complexType>
 
 <xs:complexType name="createPiles">
@@ -125,6 +133,18 @@
 <xs:sequence/>
 </xs:complexType>
 
+<xs:complexType name="removeCardGame">
+<xs:sequence>
+<xs:element name="game-id" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="removeCardGameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="showTopCard">
 <xs:sequence>
 <xs:element name="game-id" type="xs:string" minOccurs="0"/>
@@ -135,18 +155,6 @@
 <xs:complexType name="showTopCardResponse">
 <xs:sequence>
 <xs:element name="return" type="ns1:cardType" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="removeCardGame">
-<xs:sequence>
-<xs:element name="game-id" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="removeCardGameResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean"/>
 </xs:sequence>
 </xs:complexType>
 
