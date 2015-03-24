@@ -1,9 +1,16 @@
 package com.example.model;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Image implements Serializable {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private int imageId;
     private byte[] content;
     private String contentType;  // needed for MIME type

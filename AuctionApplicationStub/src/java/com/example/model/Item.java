@@ -1,11 +1,26 @@
 package com.example.model;
 
-public class Item {
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-    private int itemId;
+@Entity
+public class Item implements Serializable{
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private int itemId;  
+    @OneToOne
+    @JoinColumn(name = "IMAGEID")
     private Image image;
     private String title;
     private String description;
+    @Column(name = "ITEMCONDITION")
     private String condition;  // NEW, USED, PARTS
 
     public Item() {

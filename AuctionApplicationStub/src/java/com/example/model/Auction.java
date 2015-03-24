@@ -1,16 +1,45 @@
 package com.example.model;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class Auction {
-
+@Entity
+public class Auction implements Serializable
+{
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private int auctionId;
-    private AuctionUser seller;
+    @ManyToOne
+    @JoinColumn(name = "SELLERID")
+    private AuctionUser seller;   
+    @OneToOne
+    @JoinColumn(name="ITEMID")
     private Item item;
     private float currPrice;
     private float increment;
     private int status;  // 1 = active, 2 = ended, 3 = cancelled
-    private Date endDate;  
+    @Temporal(TemporalType.DATE)
+    private Date endDate; 
+    @OneToMany(mappedBy = "auction")
+    private Collection<Bid> bids;
+    @ManyToMany
+    @JoinTable(name = "WATCHEDAUCTIONS", 
+            joinColumns = @JoinColumn(name = "AUCTIONID"), 
+            inverseJoinColumns = @JoinColumn(name = "WATCHERID"))
+    private Collection<AuctionUser> watchers;
     
     public Auction() {
     }
@@ -84,5 +113,29 @@ public class Auction {
     @Override
     public String toString() {
         return "Auction{" + "auctionId=" + auctionId + ", seller=" + seller + ", item=" + item + ", currPrice=" + currPrice + ", increment=" + increment + ", status=" + status + ", endDate=" + endDate + '}';
+    }
+    
+    public void addBid(Bid bid){
+        bids.add(bid);
+    }
+    
+    public int getNumsBids(){
+        return bids.size();
+    }
+    
+    public void addWatcher(AuctionUser watcher) {
+        watchers.add(watcher);
+    }
+
+    public void removeWatcher(AuctionUser watcher) {
+        watchers.remove(watcher);
+    }
+
+    public int getNumWatches() {
+        return watchers.size();
+    }
+
+    public boolean isWatchedBy(AuctionUser watcher) {
+        return watchers.contains(watcher);
     }
 }

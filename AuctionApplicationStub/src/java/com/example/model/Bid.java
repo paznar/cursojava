@@ -1,14 +1,34 @@
 package com.example.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class Bid {
+@Entity
+public class Bid implements Serializable{
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private int bidId;
+    @ManyToOne
+    @JoinColumn(name = "BIDDERID")
     private AuctionUser bidder;
+    @ManyToOne
+    @JoinColumn(name = "AUCTIONID")
     private Auction auction;
     private float amount;
+    @Temporal(TemporalType.DATE)
     private Date bidTime; // Stored as TIMESTAMP
+    @ManyToOne
+    private Auction bids;
 
     public Bid() {
     }

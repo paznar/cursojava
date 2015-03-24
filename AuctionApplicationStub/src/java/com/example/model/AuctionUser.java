@@ -1,15 +1,29 @@
 package com.example.model;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-public class AuctionUser {
+@Entity
+public class AuctionUser implements Serializable{
 
+    @Id
+    @Column(name="USERID")
     private String displayName;
     private String password;
     private String email;
     private String street;
     private String cityState;
     private String zip;
+    @OneToMany(mappedBy = "bidder")
+    private Collection<Bid> bids;
+    @ManyToMany(mappedBy = "watchers")
+    private Collection<Auction> auctions;
 
     public AuctionUser() {
     }
@@ -100,5 +114,9 @@ public class AuctionUser {
             return false;
         }
         return true;
+    }
+    
+    public Collection<Bid> getBids(){
+        return bids;
     }
 }
