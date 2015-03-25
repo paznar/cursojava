@@ -15,6 +15,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @Stateless
@@ -31,7 +32,7 @@ public class AuctionFacade {
     public AuctionListView[] getSearchListView(String searchStr) {
         searchStr = "%" + searchStr.toUpperCase() + "%";
         Auction[] auctionList;
-        TypedQuery<Auction> searchQuery = em.createQuery("SELECT a FROM Auction a WHERE UPPER(a.item.title) LIKE :search", Auction.class);
+        TypedQuery<Auction> searchQuery = em.createNamedQuery("Auction.search", Auction.class);
         searchQuery.setParameter("search", searchStr);
         List<Auction> auctions = searchQuery.getResultList();
         auctionList = auctions.toArray(new Auction[0]);
@@ -41,16 +42,14 @@ public class AuctionFacade {
     private AuctionUser getUserByName(String userName) {
         AuctionUser user = null;
         if (userName != null) {
-            StringBuilder auctionUserQuery = new StringBuilder();
-            auctionUserQuery.append("SELECT au FROM AuctionUser au WHERE au.displayName = :displayName:");
-            TypedQuery<AuctionUser> findAuctionUser = em.createQuery(auctionUserQuery.toString(), AuctionUser.class);
+            TypedQuery<AuctionUser> findAuctionUser = em.createNamedQuery("AuctionUser.findByUserName", AuctionUser.class);
             findAuctionUser.setParameter("displayName", userName);
             user = findAuctionUser.getSingleResult();
         }
         return user;
     }
 
-    // new for L8 P1 - building queries with strings using JPQL
+    // new for L8
     public AuctionListView[] getAllWatchListView(String userName) {
         Auction[] auctionList = null;
         try {
@@ -59,14 +58,15 @@ public class AuctionFacade {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
         }
+        
         return buildAuctionListView(auctionList);
     }
 
     public AuctionListView[] getAllAuctionListView() {
         Auction[] auctionList = null;
         try {
-            TypedQuery<Auction> query = em.createQuery("SELECT a FROM Auction a ORDER BY a.endDate ASC, a.currPrice ASC", Auction.class);
-            List<Auction> auctions = query.getResultList();
+            TypedQuery<Auction> auctionQuery = em.createNamedQuery("Auction.findAll", Auction.class);
+            List<Auction> auctions = auctionQuery.getResultList();
             auctionList = auctions.toArray(new Auction[0]);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
@@ -78,16 +78,13 @@ public class AuctionFacade {
     public AuctionListView[] getAllAuctionListView(AuctionStatus status, ItemCondition condition) {
         Auction[] auctionList = null;
         try {
-            TypedQuery<Auction> query;
-            StringBuilder auctionQuery = new StringBuilder();
-            auctionQuery.append("SELECT a FROM Auction a WHERE a.status = :status ");
-            if (condition != null) {
-                auctionQuery.append("AND a.item.condition = :condition ");
-            }
-            auctionQuery.append("ORDER BY a.endDate ASC, a.currPrice ASC");
-            query = em.createQuery(auctionQuery.toString(), Auction.class);
-            query.setParameter("status", status);
-            if (condition != null) {
+            TypedQuery<Auction> query;     
+            if (condition == null) {
+                query = em.createNamedQuery("Auction.findByStatus", Auction.class);
+                query.setParameter("status", status);
+            } else {
+                query = em.createNamedQuery("Auction.findByStatusbyCondition", Auction.class);
+                query.setParameter("status", status);
                 query.setParameter("condition", condition);
             }
             List<Auction> auctions = query.getResultList();
@@ -103,17 +100,15 @@ public class AuctionFacade {
         Auction[] auctionList = null;
         try {
             AuctionUser seller = getUserByName(userName);
-            TypedQuery query;
-            StringBuilder auctionQuery = new StringBuilder();
-            auctionQuery.append("SELECT a FROM Auction a WHERE a.seller = :seller AND a.status = :status ");
-            if (condition != null) {
-                auctionQuery.append("AND a.item.condition = :condition ");
-            }
-            auctionQuery.append("ORDER BY a.endDate ASC, a.currPrice ASC");
-            query = em.createQuery(auctionQuery.toString(), Auction.class);
-            query.setParameter("seller", seller);
-            query.setParameter("status", status);
-            if (condition != null) {
+            TypedQuery<Auction> query;      // added L8
+            if (condition == null) {
+                query = em.createNamedQuery("Auction.findBySellerByStatus", Auction.class);
+                query.setParameter("seller", seller);
+                query.setParameter("status", status);
+            } else {
+                query = em.createNamedQuery("Auction.findBySellerByStatusByCondition", Auction.class);
+                query.setParameter("seller", seller);
+                query.setParameter("status", status);
                 query.setParameter("condition", condition);
             }
             List<Auction> auctions = query.getResultList();
@@ -121,6 +116,7 @@ public class AuctionFacade {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
         }
+
         return buildAuctionListView(auctionList);
     }
 
@@ -223,6 +219,7 @@ public class AuctionFacade {
             LOG.log(Level.SEVERE, e.getMessage());
         }
         return auction;
+
     }
 
     // Update an auction - for example, to add a bid
@@ -245,6 +242,7 @@ public class AuctionFacade {
             auction = em.find(Auction.class, auctionId);
             if (!auction.isWatchedBy(watcher)) {
                 auction.addWatcher(watcher);
+                em.merge(auction);
                 result = true;
             }
         } catch (Exception e) {
@@ -260,6 +258,7 @@ public class AuctionFacade {
             auction = em.find(Auction.class, auctionId);
             if (auction.isWatchedBy(watcher)) {
                 auction.removeWatcher(watcher);
+                em.merge(auction);
                 result = true;
             }
         } catch (Exception e) {
