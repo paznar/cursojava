@@ -1,8 +1,16 @@
 package com.example.model;
 
+import com.example.util.ItemCondition;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,18 +23,25 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int itemId;
-    @OneToOne
+    @OneToOne (cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "IMAGEID")
     private Image image;
     private String title;
     private String description;
+//    @Column(name = "ITEMCONDITION")
+//    private String condition;  // NEW, USED, PARTS
+    @Enumerated(EnumType.STRING)
     @Column(name = "ITEMCONDITION")
-    private String condition;  // NEW, USED, PARTS
+    private ItemCondition condition = ItemCondition.NEW;  // NEW, USED, PARTS
+    // added L7P2
+    @ElementCollection
+    @CollectionTable(name="TAGS", joinColumns=@JoinColumn(name="ITEMID"))
+    private List<String> keywords = new ArrayList<>();
 
     public Item() {
     }
 
-    public Item(int itemId, Image image, String title, String description, String condition) {
+    public Item(int itemId, Image image, String title, String description, ItemCondition condition) {
         this.itemId = itemId;
         this.image = image;
         this.title = title;
@@ -67,10 +82,21 @@ public class Item implements Serializable {
     }
 
     public String getCondition() {
-        return condition;
+        // modified in 7
+        return condition.getLabel();
     }
 
     public void setCondition(String condition) {
-        this.condition = condition;
+        // modified in 7
+        this.condition = ItemCondition.valueOf(condition);
     }
+    // added L7 P2
+    public void addKeyword(String keyword) {
+        keywords.add(keyword);
+    }
+    
+    public List<String> getKeyWords() {
+        return keywords;
+    }
+    
 }

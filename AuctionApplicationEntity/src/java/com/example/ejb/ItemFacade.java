@@ -28,6 +28,19 @@ public class ItemFacade {
         return item;
     }
 
+    // Added L7P2
     public void addItemTags(int itemId, String tags) {
+        Item item;
+        try {
+            item = em.find(Item.class, itemId);
+            String[] tagTokens = tags.trim().toLowerCase().split("\\s*,\\s*");
+            if (tagTokens.length > 0) {
+                for (String tag : tagTokens) {
+                    item.addKeyword(tag);
+                }
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+        }
     }
 }

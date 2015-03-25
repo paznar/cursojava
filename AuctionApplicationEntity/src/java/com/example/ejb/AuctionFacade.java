@@ -65,7 +65,7 @@ public class AuctionFacade {
                 float bidPrice = a.getCurrPrice() + a.getIncrement();
                 String timeRemaining = null;
                 // Convert the integer value to its enum type
-                switch (AuctionStatus.values()[a.getStatus()]) {
+                switch (a.getStatus()) {
                     case ACTIVE:
                         try {
                             timeRemaining = AuctionUtil.getTimeRemaining(a.getEndDate());
@@ -113,7 +113,7 @@ public class AuctionFacade {
         boolean result = false;
         try {
             Auction auction = em.find(Auction.class, auctionId);
-            auction.setStatus(AuctionStatus.CANCELLED.ordinal());
+            auction.setStatus(AuctionStatus.CANCELLED);
             result = true;
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
@@ -125,7 +125,7 @@ public class AuctionFacade {
         boolean result = false;
         try {
             Auction auction = em.find(Auction.class, auctionId);
-            auction.setStatus(AuctionStatus.ENDED.ordinal());
+            auction.setStatus(AuctionStatus.ENDED);
             result = true;
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());

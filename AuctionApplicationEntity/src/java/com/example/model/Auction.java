@@ -1,9 +1,13 @@
 package com.example.model;
 
+import com.example.util.AuctionStatus;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,12 +29,14 @@ public class Auction implements Serializable {
     @ManyToOne
     @JoinColumn(name = "SELLERID")
     private AuctionUser seller;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "ITEMID")
     private Item item;
     private float currPrice;
     private float increment;
-    private int status;  // 1 = active, 2 = ended, 3 = cancelled
+//    private int status;  // 1 = active, 2 = ended, 3 = cancelled
+    @Enumerated(EnumType.ORDINAL)  // Stored in the datbase as an int
+    private AuctionStatus status = AuctionStatus.ACTIVE;
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     @OneToMany(mappedBy = "auction")
@@ -44,13 +50,12 @@ public class Auction implements Serializable {
     public Auction() {
     }
 
-    public Auction(int auctionId, AuctionUser seller, Item item, float currPrice, float increment, int status, Date endDate) {
+    public Auction(int auctionId, AuctionUser seller, Item item, float currPrice, float increment, Date endDate) {
         this.auctionId = auctionId;
         this.seller = seller;
         this.item = item;
         this.currPrice = currPrice;
         this.increment = increment;
-        this.status = status;
         this.endDate = endDate;
     }
 
@@ -94,12 +99,16 @@ public class Auction implements Serializable {
         this.increment = increment;
     }
 
-    public int getStatus() {
+    public AuctionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(AuctionStatus status) {
         this.status = status;
+    }
+    
+    public void setStatus(int status) {
+        this.status = AuctionStatus.values()[status];
     }
 
     public Date getEndDate() {
