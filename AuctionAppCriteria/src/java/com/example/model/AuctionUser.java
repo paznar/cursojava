@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.example.constraint.ZipCode;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @NamedQueries({
@@ -20,10 +23,16 @@ public class AuctionUser implements Serializable {
     @Id
     @Column(name = "USERID")
     private String displayName;
+    @Size(min = 6, max = 20, message = "Invalid password - please enter 6-20 characters")
+    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*)", 
+             message="Invalid password - please enter at least: one digit; one lowercase; one uppercase; one symbol \"@#$%\"")
     private String password;
+    @Pattern(regexp="^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", 
+             message="Invalid e-mail address")
     private String email;
     private String street;
     private String cityState;
+    @ZipCode
     private String zip;
     // added to the class
     @OneToMany(mappedBy = "bidder")
