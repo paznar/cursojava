@@ -3,7 +3,14 @@
   <persistence-unit name="AuctionPU" transaction-type="JTA">
     <jta-data-source>AuctionGlass</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <shared-cache-mode>NONE</shared-cache-mode>
-    <properties/>
+    <shared-cache-mode>ALL</shared-cache-mode>
+    <properties>
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.logger" value="DefaultLogger"/>
+            <property name="eclipselink.logging.thread" value="false" />
+            <property name="eclipselink.logging.session" value="false" />
+            <property name="eclipselink.logging.exceptions" value="false" />
+            <property name="eclipselink.logging.timestamp" value="false" />
+    </properties>
   </persistence-unit>
 </persistence>

@@ -26,6 +26,9 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 
 @Stateless
 public class AuctionFacade {
@@ -34,6 +37,7 @@ public class AuctionFacade {
     private EntityManager em;
     private static final Logger LOG = Logger.getLogger(AuctionFacade.class.getName());
     private AuctionListView[] auctionItemsListed;
+    private boolean readOnce = false;
 
     public AuctionFacade() {
     }
@@ -120,6 +124,16 @@ public class AuctionFacade {
             if (condition != null) {
                 auctionQuery.setParameter("condition", condition);
             }
+            if (readOnce) {
+                auctionQuery.setHint(QueryHints.CACHE_USAGE, CacheUsage.CheckCacheOnly);
+            } else {
+                auctionQuery.setHint(QueryHints.READ_ONLY, "true");
+                auctionQuery.setHint(QueryHints.BATCH, "a.bids");
+                auctionQuery.setHint(QueryHints.BATCH, "a.item");
+                auctionQuery.setHint(QueryHints.BATCH, "a.item.image");
+                auctionQuery.setHint(QueryHints.BATCH, "a.watchers");
+                readOnce = true;
+            }
             List<Auction> auctions = auctionQuery.getResultList();
             auctionList = auctions.toArray(new Auction[0]);
         } catch (Exception e) {
@@ -169,6 +183,13 @@ public class AuctionFacade {
         return buildAuctionListView(auctionList);
     }
 
+    private int getNumBids(int auctionId) {
+        String query = "SELECT COUNT(b) FROM Bid b WHERE b.auction.auctionid = :auctionid";
+        Query getCount = em.createQuery(query);
+        int result = ((Integer) getCount.getSingleResult()).intValue();
+        return result;
+    }
+
     private AuctionListView[] buildAuctionListView(Auction[] auctionList) {
         // Get a count to create the array
         if (auctionList != null) {
@@ -188,7 +209,9 @@ public class AuctionFacade {
                 String desc = item.getDescription();
                 String cond = item.getCondition();
                 int numBids = a.getNumBids();
+                //int numBids = getNumBids(a.getAuctionId());
                 int numWatches = a.getNumWatches();
+                //int numWatches = 5;
                 float currPrice = a.getCurrPrice();
                 float bidPrice = a.getCurrPrice() + a.getIncrement();
                 String timeRemaining = null;

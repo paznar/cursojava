@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 @Entity
 @NamedQueries({
@@ -49,11 +51,16 @@ public class Auction implements Serializable {
     private AuctionStatus status = AuctionStatus.ACTIVE;
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
+    @Version
+    private int version;  // L11P1
+    
     // added to the class
-    @OneToMany(mappedBy = "auction")
+    //@OneToMany(mappedBy = "auction")
+    @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
     private Collection<Bid> bids;
     // added to the class
-    @ManyToMany
+    //@ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "WATCHEDAUCTIONS",
     joinColumns =
     @JoinColumn(name = "AUCTIONID"),

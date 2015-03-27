@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -24,22 +26,24 @@ public class AuctionUser implements Serializable {
     @Column(name = "USERID")
     private String displayName;
     @Size(min = 6, max = 20, message = "Invalid password - please enter 6-20 characters")
-    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*)", 
-             message="Invalid password - please enter at least: one digit; one lowercase; one uppercase; one symbol \"@#$%\"")
+    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*)", message="Invalid password - please enter at least: one digit; one lowercase; one uppercase; one symbol \"@#$%\"")
     private String password;
-    @Pattern(regexp="^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", 
-             message="Invalid e-mail address")
+    @Pattern(regexp="^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Invalid e-mail address")
     private String email;
-    private String street;
-    private String cityState;
-    @ZipCode
-    private String zip;
+    @Embedded
+    private Address address;
+//    private String street;
+//    private String cityState;
+//    @ZipCode
+//    private String zip;
     // added to the class
-    @OneToMany(mappedBy = "bidder")
+    //@OneToMany(mappedBy = "bidder")
+    @OneToMany(mappedBy = "bidder", fetch = FetchType.LAZY)
     private Collection<Bid> bids;
     // added to the class
     // Watchers
-    @ManyToMany(mappedBy = "watchers")
+    //@ManyToMany(mappedBy = "watchers")
+    @ManyToMany(mappedBy = "watchers", fetch = FetchType.LAZY)
     private Collection<Auction> auctions;
 
     public AuctionUser() {
@@ -49,9 +53,7 @@ public class AuctionUser implements Serializable {
         this.displayName = displayName;
         this.password = password;
         this.email = email;
-        this.street = street;
-        this.cityState = cityState;
-        this.zip = zip;
+        address = new Address(street, cityState, zip);
     }
 
     public String getDisplayName() {
@@ -79,27 +81,29 @@ public class AuctionUser implements Serializable {
     }
 
     public String getStreet() {
-        return street;
+        return address.getStreet();
     }
 
     public void setStreet(String street) {
-        this.street = street;
+        address.setStreet(street);
     }
 
     public String getCityState() {
-        return cityState;
+        return address.getCityState();
     }
 
     public void setCityState(String cityState) {
-        this.cityState = cityState;
+        address.setCityState(cityState);
     }
 
+    // Bean Validation moved here L12P1
+    @ZipCode
     public String getZip() {
-        return zip;
+        return address.getZip();
     }
 
     public void setZip(String zip) {
-        this.zip = zip;
+        address.setZip(zip);
     }
 
     public Collection<Bid> getBids() {
@@ -110,11 +114,6 @@ public class AuctionUser implements Serializable {
         return auctions;
     }
     
-    @Override
-    public String toString() {
-        return "AuctionUser{" + "displayName=" + displayName + ", password=" + password + ", email=" + email + ", street=" + street + ", city_state=" + cityState + ", zip=" + zip + ", bids=" + bids + ", auctions=" + auctions + '}';
-    }
-
     @Override
     public int hashCode() {
         int hash = 5;
